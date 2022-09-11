@@ -49,8 +49,10 @@ public class UserServiceImp implements UserService{
     @Transactional
     public void save(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        Set<Role> roleSet = user.getRoles();
-        roleSet.add(defaultRole);
+        if (user.getRoles().contains(roleRepository.getById(2L))) {
+            Set<Role> roleSet = user.getRoles();
+            roleSet.add(defaultRole);
+        }
         userDao.save(user);
     }
 
@@ -58,8 +60,10 @@ public class UserServiceImp implements UserService{
     @Transactional
     public void update(Long id, User updateUser) {
         updateUser.setPassword(new BCryptPasswordEncoder().encode(updateUser.getPassword()));
-        Set<Role> roleSet = updateUser.getRoles();
-        roleSet.add(defaultRole);
+        if (updateUser.getRoles().contains(roleRepository.getById(2L))) {
+            Set<Role> roleSet = updateUser.getRoles();
+            roleSet.add(defaultRole);
+        }
         updateUser.setId(id);
         userDao.save(updateUser);
     }

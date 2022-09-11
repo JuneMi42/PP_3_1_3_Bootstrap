@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .block1 {
+            color: aliceblue;
+        }
+    </style>
+</head>
+<body>
+<header style="background:#1d1d25; padding:10px 20px;">
+    <table style="width: 100%">
+        <th align="left">
+            <div class="block1">
+                <nobr th:text="${userHEAD.getEmail()}">VALUE</nobr>
+                <nobr>with roles: </nobr>
+                <nobr th:text="${userHEAD.getRoles()}">VALUE</nobr>
+            </div>
+        </th>
+        <th align="left"><form th:action="@{/user}">
+            <input type="submit" value="Home Page">
+        </form>
+        </th>
+        <th align="right"><form th:action="@{/logout}">
+            <input type="submit" value="Logout"/>
+        </form></th>
+    </table>
+</header>
+<br/>
+
+<table border="1" align="center" style="width: 90%" >
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <tr>
+        <td th:utext="${user.getId()}">VALUE</td>
+        <td th:utext="${user.getName()}">VALUE</td>
+        <td th:utext="${user.getAge()}">VALUE</td>
+        <td th:utext="${user.getEmail()}">VALUE</td>
+        <td th:utext="${user.getRoles()}">VALUE</td>
+        <td align="center"><form th:action="@{/admin/{id}/edit(id=${user.getId()})}">
+            <button type="submit">Edit!</button>
+        </form>
+        </td>
+        <td align="center"><form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
+            <input type="submit" value="Delete"/>
+        </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

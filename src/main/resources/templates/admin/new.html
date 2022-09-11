@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .block1 {
+            color: aliceblue;
+        }
+    </style>
+</head>
+<body>
+<header style="background:#1d1d25; padding:10px 20px;">
+    <table style="width: 100%">
+        <th align="left">
+            <div class="block1">
+                <nobr th:text="${userHEAD.getEmail()}">VALUE</nobr>
+                <nobr>with roles: </nobr>
+                <nobr th:text="${userHEAD.getRoles()}">VALUE</nobr>
+            </div>
+        </th>
+        <th align="left"><form th:action="@{/user}">
+            <input type="submit" value="Home Page">
+        </form>
+        </th>
+        <th align="right"><form th:action="@{/logout}">
+            <input type="submit" value="Logout"/>
+        </form></th>
+    </table>
+</header>
+<br/>
+
+<form th:method="POST" th:action="@{/admin}" th:object="${user}">
+  <label for="name">Enter name</label>
+    <input type="text" th:field="*{name}" id="name">
+    <br/>
+    <label for="age">Enter age</label>
+    <input type="text" th:field="*{age}" id="age">
+    <br/>
+     <label for="email">Enter email</label>
+    <input type="text" th:field="*{email}" id="email">
+    <br/>
+    <label for="password">Enter pass</label>
+    <input type="text" th:field="*{password}" id="password">
+    <br/>
+    <table>
+        <td th:each="role : ${roles}">
+    <label for="role">Enter role</label>
+    <input name="rolesId" type="checkbox" th:text="${role.name}"
+           id="role" th:value="${role.id}" th:field="*{roles}"/>
+        </td>
+    </table>
+  <input type="submit" value="Create">
+</form>
+
+</body>
+</html>

@@ -36,7 +36,7 @@
   <input type="text" th:field="*{name}" id="name">
   <br/>
   <label for="age">Enter age</label>
-  <input type="text" th:field="*{age}" id="age">
+  <input type="number" th:field="*{age}" id="age">
   <br/>
   <label for="email">Enter email</label>
   <input type="text" th:field="*{email}" id="email">
@@ -44,13 +44,11 @@
   <label for="password">Enter pass</label>
   <input type="password" th:field="*{password}" id="password">
   <br/>
-  <table>
-    <td th:each="role : ${roles}">
       <label for="role">Enter role</label>
-      <input name="rolesId" type="checkbox" th:text="${role.name}"
-             id="role" th:value="${role.id}" th:field="*{roles}"/>
-    </td>
-  </table>
+  <select id="role" th:field="*{roles}">
+    <option th:each="role : ${roles}" th:value="${role.id}" th:utext="${role.name}"></option>
+  </select>
+  <br/>
   <input type="submit" value="Update!">
 </form>
 

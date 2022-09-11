@@ -10,8 +10,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,11 +19,13 @@ public class UserServiceImp implements UserService{
 
     private final UserRepository userDao;
     private final RoleRepository roleRepository;
+    private final Role defaultRole;
 
 
     public UserServiceImp(UserRepository userDao, RoleRepository roleRepository) {
         this.userDao = userDao;
         this.roleRepository = roleRepository;
+        this.defaultRole = roleRepository.getById(1L);
     }
 
     @Override
@@ -49,6 +49,8 @@ public class UserServiceImp implements UserService{
     @Transactional
     public void save(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        Set<Role> roleSet = user.getRoles();
+        roleSet.add(defaultRole);
         userDao.save(user);
     }
 
@@ -56,6 +58,8 @@ public class UserServiceImp implements UserService{
     @Transactional
     public void update(Long id, User updateUser) {
         updateUser.setPassword(new BCryptPasswordEncoder().encode(updateUser.getPassword()));
+        Set<Role> roleSet = updateUser.getRoles();
+        roleSet.add(defaultRole);
         updateUser.setId(id);
         userDao.save(updateUser);
     }

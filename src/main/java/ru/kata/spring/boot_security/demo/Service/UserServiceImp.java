@@ -1,8 +1,10 @@
 package ru.kata.spring.boot_security.demo.Service;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
@@ -19,13 +21,15 @@ public class UserServiceImp implements UserService{
 
     private final UserRepository userDao;
     private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final Role defaultRole;
 
 
-    public UserServiceImp(UserRepository userDao, RoleRepository roleRepository) {
+    public UserServiceImp(UserRepository userDao, RoleRepository roleRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.roleRepository = roleRepository;
         this.defaultRole = roleRepository.getById(1L);
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -48,7 +52,7 @@ public class UserServiceImp implements UserService{
     @Override
     @Transactional
     public void save(User user) {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (user.getRoles().contains(roleRepository.getById(2L))) {
             Set<Role> roleSet = user.getRoles();
             roleSet.add(defaultRole);
@@ -59,10 +63,14 @@ public class UserServiceImp implements UserService{
     @Override
     @Transactional
     public void update(Long id, User updateUser) {
-        updateUser.setPassword(new BCryptPasswordEncoder().encode(updateUser.getPassword()));
         if (updateUser.getRoles().contains(roleRepository.getById(2L))) {
             Set<Role> roleSet = updateUser.getRoles();
             roleSet.add(defaultRole);
+        }
+        if (updateUser.getPassword().isEmpty()) {
+            updateUser.setPassword(userDao.findById(id).get().getPassword());
+        } else {
+            updateUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         }
         updateUser.setId(id);
         userDao.save(updateUser);

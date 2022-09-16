@@ -38,6 +38,13 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
+    public String getTrueName() {
+        if (this.name.equals("ROLE_ADMIN")) {
+            return "ADMIN";
+        }
+        return "USER";
+    }
+
     public void setName(String name) {
         this.name = name;
     }

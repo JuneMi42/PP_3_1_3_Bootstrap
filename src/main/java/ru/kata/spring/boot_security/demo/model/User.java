@@ -20,13 +20,17 @@ public class User implements UserDetails {
     private Long id;
 
     @NotEmpty(message = "Имя не должно быть пустым")
-    @Column(name = "name")
+    @Column(name = "firstName")
     private String name;
+
+    @NotEmpty(message = "плох")
+    @Column(name = "lastName")
+    private String lastName;
 
     @Column(name = "age")
     private int age;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @NotEmpty(message = "мега Плох")
     private String email;
 
@@ -45,7 +49,7 @@ public class User implements UserDetails {
 
     public User() {}
 
-    public User(String name, int age, String email) {
+    public User(String name, String lastName, int age, String email) {
         this.name = name;
         this.age = age;
         this.email = email;
@@ -65,6 +69,14 @@ public class User implements UserDetails {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public int getAge() {
@@ -128,6 +140,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getRolesString() {
+        StringBuilder sb = new StringBuilder();
+        for (Role role : this.getRoles()) {
+            sb.append(role.getName().split("_")[1]).append(" ");
+        }
+        return sb.toString();
     }
 
     @Override

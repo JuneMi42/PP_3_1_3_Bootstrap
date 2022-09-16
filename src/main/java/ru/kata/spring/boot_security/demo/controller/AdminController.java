@@ -23,9 +23,11 @@ public class AdminController {
 
     @GetMapping()
     public String getUser(Model model, @AuthenticationPrincipal User userHEAD) {
+        model.addAttribute("newUser", new User());
         model.addAttribute("users", userService.getUsers());
         model.addAttribute("userHEAD", userHEAD);
-        return "admin/getUser";
+        model.addAttribute("roles", userService.getRoles());
+        return "admin/adminPage";
     }
 
     @GetMapping("/{id}")
@@ -35,13 +37,6 @@ public class AdminController {
         return "admin/userById";
     }
 
-    @GetMapping("/new")
-    public String newUser(Model model, @AuthenticationPrincipal User userHEAD) {
-        model.addAttribute("user", new User());
-        model.addAttribute("userHEAD", userHEAD);
-        model.addAttribute("roles", userService.getRoles());
-        return "admin/new";
-    }
 
     @PostMapping
     public String create(@ModelAttribute("user") User user) {
@@ -49,19 +44,13 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") Long id, @AuthenticationPrincipal User userHEAD) {
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("userHEAD", userHEAD);
-        model.addAttribute("roles", userService.getRoles());
-        return "admin/edit";
-    }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
         userService.update(id, user);
         return "redirect:/admin";
     }
+
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id) {

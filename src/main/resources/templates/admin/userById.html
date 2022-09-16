@@ -51,7 +51,8 @@
             <button type="submit">Edit!</button>
         </form>
         </td>
-        <td align="center"><form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
+        <td align="center">
+            <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
             <input type="submit" value="Delete"/>
         </form>
         </td>
